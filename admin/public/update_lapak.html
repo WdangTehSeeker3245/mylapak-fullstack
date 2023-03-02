@@ -183,7 +183,7 @@
     <script>
         $(document).ready(function () {
           let searchParams1 = new URLSearchParams(window.location.search)
-          var params1 = searchParams2.get('id')
+          var params1 = searchParams1.get('id')
           $.get("http://localhost:5000/api/viewlapakadmin/"+params1,
           function (response) {
             // console.log(response.data)
@@ -205,7 +205,7 @@
             let searchParams2 = new URLSearchParams(window.location.search)
             var params2 = searchParams2.get('id')
             $.ajax({
-              type: "POST",
+              type: "PUT",
               url: "http://localhost:5000/api/updatelapak/"+params2,
               data: JSON.stringify({
                 "image_lapak" : img,

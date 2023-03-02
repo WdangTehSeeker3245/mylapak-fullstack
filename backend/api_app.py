@@ -64,7 +64,7 @@ class MyLapakInsert(Resource):
 
 class MyLapakUpdate(Resource):
     def put(self,id):
-        query = MyNoteModel.query.get(id)
+        query = MyLapakModel.query.get(id)
         editImg = request.json["image_lapak"]
         editTitle = request.json["title_lapak"]
         editPrice = request.json["price"]
@@ -170,6 +170,7 @@ class MyLapakDelete(Resource):
 
 api.add_resource(Mencoba,'/api/mencoba', methods=["POST"])
 api.add_resource(MyLapakInsert,'/api/insertlapak', methods=["POST"])
+api.add_resource(MyLapakUpdate,'/api/updatelapak/<id>', methods=["PUT"])
 api.add_resource(MyLapakList,'/api/listlapak', methods=["GET"])
 api.add_resource(MyLapakView,'/api/viewlapak/<id>', methods=["GET"])
 api.add_resource(MyLapakAdminView,'/api/viewlapakadmin/<id>', methods=["GET"])
