@@ -75,7 +75,7 @@
                 <i class="bi bi-person-fill"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+                <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
               </ul>
             </li>
           </ul>
@@ -167,6 +167,35 @@
           window.location.href = baseUrl+"?id="+params1
         }
         $(document).ready(function () {
+        // Session Protection
+        var savedToken = localStorage.getItem('token');
+        var savedUser = localStorage.getItem('username');
+        $.ajax({
+                type: "POST",
+                url: "http://localhost:5000/api/adminpage",
+                headers: {
+                    'Authorization': 'Bearer '+savedToken
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response.msg)
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    alert("can't get admin name")
+                    location.href = "http://localhost:3000/login.html"
+                }
+        });
+
+        // Session Logout
+        $("#logout").click(function (e) { 
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                alert("token login removed")
+                location.href ="http://localhost:3000/login.html"
+        });
+
+        // View Lapak
         let searchParams2 = new URLSearchParams(window.location.search)
         var params2 = searchParams2.get('id')
         $.get("http://localhost:5000/api/viewlapakadmin/"+params2,

@@ -69,7 +69,7 @@
                 <i class="bi bi-person-fill"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+                <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
               </ul>
             </li>
           </ul>
@@ -289,6 +289,8 @@
     <script src="./js/jquery-3.5.1.js"></script>
     <script>
       $(document).ready(function () {
+
+        // Modal Javacript Function
         $("#viewlapak").click(function (e) { 
           e.preventDefault();
           var viewModal = new bootstrap.Modal(document.getElementById('viewModal'))
@@ -322,18 +324,53 @@
         });
         $("#deletekdlapak").click(function (e) { 
           e.preventDefault();
-            var kddeletelapak = $("#kd_deletlapak").val()
+            var kddeletelapak = $("#kd_deletelapak").val()
             var id = kddeletelapak.charAt(kddeletelapak.length - 1);
             var urldel = "http://localhost:5000/api/deletelapak/"+id
+            var savedToken = localStorage.getItem('token');
+            var savedUser = localStorage.getItem('username');
             $.ajax({
               type: "DELETE",
               url: urldel,
+              headers: {
+                'Authorization': 'Bearer '+savedToken
+              },
               success: function (response) {
                 alert(response.msg)
                 location.reload().delay(1000)
               }
             });
         });
+
+        // Session Protection
+        var savedToken = localStorage.getItem('token');
+        var savedUser = localStorage.getItem('username');
+        $.ajax({
+                type: "POST",
+                url: "http://localhost:5000/api/admin",
+                headers: {
+                    'Authorization': 'Bearer '+savedToken
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response.msg)
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    alert("can't get admin name")
+                    location.href = "http://localhost:3000/login.html"
+                }
+        });
+
+        // Session Logout
+        $("#logout").click(function (e) { 
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                alert("token login removed")
+                location.href ="http://localhost:3000/login.html"
+        });
+
+        // Get List Lapak
         $.ajax({
         type: "GET",
         url: "http://localhost:5000/api/listlapak",

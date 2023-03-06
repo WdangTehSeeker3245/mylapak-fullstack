@@ -69,7 +69,7 @@
                 <i class="bi bi-person-fill"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Logout</a></li>
+                <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
               </ul>
             </li>
           </ul>
@@ -110,21 +110,9 @@
               </a>
             </li>
             <li>
-              <a href="#" id="viewlapak" class="nav-link px-3">
-                <span class="me-2"><i class="fa-solid fa-eye"></i></span>
-                <span>View Lapak</span>
-              </a>
-            </li>
-            <li>
               <a href="update_lapak.html" class="nav-link px-3">
                 <span class="me-2"><i class="fa-solid fa-warehouse"></i></i></span>
                 <span>Update Lapak</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" id="deletelapak" class="nav-link px-3">
-                <span class="me-2"><i class="fa-solid fa-circle-xmark"></i></span>
-                <span>Delete Lapak</span>
               </a>
             </li>
           </ul>
@@ -178,6 +166,35 @@
     <script src="./js/script.js"></script>
     <script>
         $(document).ready(function () {
+          // Session Protection
+          var savedToken = localStorage.getItem('token');
+          var savedUser = localStorage.getItem('username');
+          $.ajax({
+                type: "POST",
+                url: "http://localhost:5000/api/adminpage",
+                headers: {
+                    'Authorization': 'Bearer '+savedToken
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response.msg)
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    alert("can't get admin name")
+                    location.href = "http://localhost:3000/login.html"
+                }
+          });
+          
+          // Session Logout
+          $("#logout").click(function (e) { 
+                e.preventDefault();
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                alert("token login removed")
+                location.href ="http://localhost:3000/login.html"
+          });
+
+          //  Add Lapak
            $("#lapakadd").click(function (e) { 
             e.preventDefault();
             var img = $("#image").val()
@@ -185,9 +202,14 @@
             var price = $("#price").val()
             var shdesc = $("#shortdescription").val()
             var desc = $("#description").val()
+            var savedToken = localStorage.getItem('token');
+            var savedUser = localStorage.getItem('username');
             $.ajax({
               type: "POST",
               url: "http://localhost:5000/api/insertlapak",
+              headers: {
+                    'Authorization': 'Bearer '+savedToken
+              },
               data: JSON.stringify({
                 "image_lapak" : img,
                 "title_lapak" : title,
